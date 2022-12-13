@@ -1,6 +1,6 @@
 using System;
 namespace section9;
-public abstract class person{
+public  class person{
     public string Name;
     public int Age;
     public person(string name,int age){
@@ -8,7 +8,10 @@ public abstract class person{
         Age=age;
 
     }
-    public abstract void Print();
+    public  virtual void Print(){
+        Console.WriteLine(
+            $"my name is{Name} my age{Age}");
+    }
 }
 public class Student : person{
     public int Year;
@@ -32,7 +35,7 @@ public class Staff: person{
         Joinyear=joinyear;
 
     }
-    public override void Print(){
+    public  override void Print(){
         Console.WriteLine(
             $"my name is{Name} my age{Age},and my salary is {Salary}");
     }
@@ -41,14 +44,29 @@ public class Staff: person{
 public class Database{
     private int _currentindex;
     public person[]people=new person [50];
-    public void addStudent(Student student){
+    public void AddStudent(Student student){
         people[_currentindex++]=student;
+    }
+    public void AddStaff(Staff staff){
+        people[_currentindex++]=staff;
+    }
+    public void PrintAll(){
+        for(int i=0;i<_currentindex;i++){
+            people[i].Print();}
+    }
+    public void Addperson(person person){
+        people[_currentindex++]=person;
     }
 }
 public class program{
     private static void Main(){
        var database=new Database();
-       Console.Write("name: ");
+       while(true){
+        Console.Write("1)add student,2)add staff,3) show all,4)add non student ,non staff");
+        int n=Convert.ToInt32(Console.ReadLine());
+        switch(n){
+        case 1:
+        Console.Write("name: ");
        var name=Console.ReadLine();
        Console.Write("age: ");
        var age=Convert.ToInt32(Console.ReadLine());
@@ -56,20 +74,42 @@ public class program{
        var year =Convert.ToInt32(Console.ReadLine());
        Console.Write("GPA: ");
        var gpa=Convert.ToSingle(Console.ReadLine());
+       var student=new Student(name,age,year,gpa);
+       database.AddStudent(student);
+       
+            break;
+        case 2:
+        Console.Write("name: ");
+       var name2=Console.ReadLine();
+       Console.Write("age: ");
+       var age2=Convert.ToInt32(Console.ReadLine());
        Console.Write("salary: ");
        var salary=Convert.ToDouble(Console.ReadLine());
        Console.Write("joinyear: ");
        var joinyear=Convert.ToInt32(Console.ReadLine());
-       int n=Convert.ToInt32(Console.ReadLine());
-       if(n==1){
-        var student=new Student(name,age,year,gpa);
+       var staff=new Staff(name2,age2,salary,joinyear);
+       database.AddStaff(staff);
+        break;
+        case 3:
+           database.PrintAll();
+            break;
+        case 4:
+         Console.Write("name: ");
+         var name3=Console.ReadLine();
+         Console.Write("age: ");
+         var age3=Convert.ToInt32(Console.ReadLine());
+         var person=new person(name3,age3);
+         database.Addperson(person);
+         break;
+         default:
+             return;
+        }
+
        }
-       else if(n==2){
-        var staff=new Staff(name,age,salary,joinyear);
+       
+
        }
-      
-       }
+     
 
 
     }
-}
