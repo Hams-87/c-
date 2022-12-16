@@ -1,43 +1,103 @@
 using System;
 namespace section9;
 public  class person{
-    public string Name;
-    public int Age;
-    public person(string name,int age){
-        Name=name;
-        Age=age;
+    private string _name;
+    private int _age;
+    
+    public string Name{
+        get{
+            return _name;
+        }
+        set{
+            if(value == null || value =="" ||  value.Length>=32){
+            throw new Exception("Invalid Name");
+        }
+            _name=value;
+        }
 
     }
+    
+    public person(string name,int age){
+
+        if(age<=0||age>128){
+            throw new Exception("Invaild age");
+        }
+        Name=name;
+        _age=age;
+
+    }
+    public int GetAge()=>_age;
     public  virtual void Print(){
         Console.WriteLine(
-            $"my name is{Name} my age{Age}");
+            $"my name is{Name} my age{_age}");
     }
 }
 public class Student : person{
-    public int Year;
-    public float Gpa;
+    private int _year;
+    private float _gpa;
+    public int Year{
+        get{
+            return _year;
+        }
+        set{
+            if(value<=0 || value>5){
+            throw new Exception("Invaild year");
+           
 
+        }
+         _year=value;
+        }
+    }
+      public float Getgpa()=>_gpa;
     public Student (string name , int age, int year ,float gpa):base(name,age){
+        
+        if(gpa<=0 || gpa>4){
+            throw new Exception("Invaild gpa");
+
+        }
         Year=year;
-        Gpa=gpa;
+        _gpa=gpa;
 
     }
+     
     public override void Print(){
         Console.WriteLine(
-            $"my name is{Name} my age{Age},and gpa is {Gpa}");
+            $"my name is{Name} my age{GetAge()},and gpa is {Getgpa()}");
     }
 }
 public class Staff: person{
-    double Salary;
-    int Joinyear;
+    private double _salary;
+    public double GetSalary()=>_salary;
+    private int _joinyear;
+    public int Joinyear{
+        get{
+            return _joinyear;
+        }
+        set{
+            if(value<=21){
+            throw new Exception("Invaild joinyear");
+        }
+        _joinyear=value;
+
+
+        }
+    }
     public Staff(string name,int age,double salary,int joinyear):base(name,age){
-        Salary=salary;
+        if(salary<=0 || salary>120000){
+            throw new Exception("Invaild salary");
+
+        }
+        if(joinyear<=21){
+            throw new Exception("Invaild joinyear");
+
+        }
+        _salary=salary;
         Joinyear=joinyear;
 
     }
     public  override void Print(){
         Console.WriteLine(
-            $"my name is{Name} my age{Age},and my salary is {Salary}");
+            $"my name is{Name} my age{GetAge()},and my salary is {_salary}");
     }
 
 }
@@ -74,8 +134,15 @@ public class program{
        var year =Convert.ToInt32(Console.ReadLine());
        Console.Write("GPA: ");
        var gpa=Convert.ToSingle(Console.ReadLine());
+       try{
        var student=new Student(name,age,year,gpa);
        database.AddStudent(student);
+       student.Year=0;
+       }
+       catch(Exception a){
+        Console.WriteLine(a.Message);
+
+       }
        
             break;
         case 2:
@@ -87,8 +154,14 @@ public class program{
        var salary=Convert.ToDouble(Console.ReadLine());
        Console.Write("joinyear: ");
        var joinyear=Convert.ToInt32(Console.ReadLine());
+       try{
        var staff=new Staff(name2,age2,salary,joinyear);
        database.AddStaff(staff);
+       staff.Joinyear=0;
+       }
+       catch(Exception b){
+          Console.WriteLine(b.Message);
+        }
         break;
         case 3:
            database.PrintAll();
@@ -98,18 +171,25 @@ public class program{
          var name3=Console.ReadLine();
          Console.Write("age: ");
          var age3=Convert.ToInt32(Console.ReadLine());
+         try{
          var person=new person(name3,age3);
          database.Addperson(person);
-         break;
-         default:
+         person.Name=null;
+         }
+
+         catch(Exception c){
+            Console.WriteLine(c.Message);
+        
+         }break;
+
+         
+         
+        default:
              return;
         }
 
        }
        
 
-       }
-     
+       }}
 
-
-    }
